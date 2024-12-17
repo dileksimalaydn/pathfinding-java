@@ -64,7 +64,22 @@ public class CountryMap {
         String destinationCity = parts[1];
         String time = parts[2];
 
+        City source = findCityByName(sourceCity);
+        addRouteToCity(source, destinationCity, time);
 
+    }
+
+    private void addRouteToCity(City city, String destinationCity, String time)
+    {
+        String[][] nextCities = city.getNextCities();
+        for (int i = 0; i < nextCities.length; i++) {
+            if (nextCities[i][0] == null) // Find the next available row
+            {
+                nextCities[i][0] = destinationCity;
+                nextCities[i][1] = time;
+                break;
+            }
+        }
     }
 
     private City findCityByName(String cityName)
