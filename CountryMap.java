@@ -47,14 +47,17 @@ public class CountryMap {
             //Routes
             for (int i = 0; i < routeCount; i++) {
                 line = reader.readLine();
-
+                processRoute(line.trim());
             }
 
+            //Computation Line
+            line = reader.readLine();
+            computationLine = line.trim();
 
-            
 
+            System.out.println("File read is successful!");
         } catch(IOException e) {
-
+            System.out.println("Error reading the file "+ e.getMessage());
         }
     }
 
