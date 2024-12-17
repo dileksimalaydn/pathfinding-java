@@ -105,7 +105,18 @@ public class CountryMap {
         throw new IOException("Unexpected end of file while skipping blank lines.");
     }
 
-    
+    public void printCountryMap() {
+        for (int i = 0; i < cityNames.length; i++) {
+            System.out.print(cityNames[i]+" ");
+        }
+        System.out.println();
+        System.out.println("---------------------------");
+
+        for (int i = 0; i < cities.length; i++) {
+            cities[i].printCity();
+        }
+        System.out.println(computationLine);
+    }
 
 
 
