@@ -33,6 +33,14 @@ public class CountryMap {
             line = reader.readLine();
             cityNames = line.trim().split(" ");
 
+            cities = new City[cityCount];
+            for(int i = 0; i < cityCount; i++)
+            {
+                cities[i] = new City(cityNames[i], new String[cityCount][2]);
+            }
+
+            
+
             
 
         } catch(IOException e) {
