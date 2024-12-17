@@ -27,11 +27,11 @@ public class CountryMap {
         try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName)))
         {
             // City Count
-            String line = reader.readLine();
+            String line = skipBlankLines(reader);
             int cityCount = Integer.parseInt(line.trim());
 
             //City Names
-            line = reader.readLine();
+            line = skipBlankLines(reader);
             cityNames = line.trim().split(" ");
 
             cities = new City[cityCount];
@@ -41,17 +41,17 @@ public class CountryMap {
             }
 
             //Route Count
-            line = reader.readLine();
+            line = skipBlankLines(reader);
             int routeCount = Integer.parseInt(line.trim());
 
             //Routes
             for (int i = 0; i < routeCount; i++) {
-                line = reader.readLine();
+                line = skipBlankLines(reader);
                 processRoute(line.trim());
             }
 
             //Computation Line
-            line = reader.readLine();
+            line = skipBlankLines(reader);
             computationLine = line.trim();
 
 
@@ -92,8 +92,17 @@ public class CountryMap {
                 return cities[i];
             }
         }
-
         throw new NoSuchElementException();
+    }
+
+    private String skipBlankLines(BufferedReader reader) throws IOException {
+        String line;
+        while((line = reader.readLine()) != null) {
+            if(!line.isBlank()) {
+                return line;
+            }
+        }
+        throw new IOException("Unexpected end of file while skipping blank lines.");
     }
 
     
