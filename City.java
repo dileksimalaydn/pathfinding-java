@@ -15,9 +15,18 @@ public class City {
         return nextCities;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void printCity()
+    {
+        System.out.println(cityName+" : ");
+        for (int i = 0; i < nextCities.length; i++) {
+            if (nextCities[i][0] != null) {
+                System.out.print(cityName + " -> " + nextCities[i][0] + " " + nextCities[i][1] + " ");
+            }
+        }
+        System.out.println();
     }
+
+
 
     
     
