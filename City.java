@@ -25,9 +25,5 @@ public class City {
         }
         System.out.println();
     }
-
-
-
-    
     
 }

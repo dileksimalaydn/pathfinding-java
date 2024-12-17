@@ -9,6 +9,15 @@ public class CountryMap {
         this.inputMapFileName = inputMapFileName;
     }
 
+    public String getComputationLine() {
+        return computationLine;
+    }
+
+    public City[] getCities() {
+        return cities;
+    }
+
+
 
     
 }
