@@ -179,8 +179,19 @@ public class CountryMap {
         }
     }
 
+    public void printErrors() {
+        for (int i = 0; i < errorCount; i++) {
+            System.out.println(errorMessages[i]);
+        }
+    }
+
     public void readInputFile()
     {
+        if (!validateFile()) {
+            printErrors();
+            return;
+        }
+        
         try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName)))
         {
             // City Count
@@ -274,8 +285,4 @@ public class CountryMap {
         }
         System.out.println(computationLine);
     }
-
-
-
-    
 }
