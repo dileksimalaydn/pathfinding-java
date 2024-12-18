@@ -42,9 +42,47 @@ public class CountryMap {
             line = skipBlankLines(reader);
             lineNumber++;
             cityNames = validateCityNames(line.trim(), cityCount, lineNumber);
+
+            // Validate Route Count
+            line = skipBlankLines(reader);
+            lineNumber++;
+            int declaredRouteCount = validateRouteCount(line.trim(), lineNumber);
+
+            // Validate Routes
+            int actualRouteCount = 0;
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                if(actualRouteCount < declaredRouteCount) {
+                    validateRouteFormat(line.trim(), lineNumber);
+                    actualRouteCount++;
+                } else {
+                    computationLine = line.trim();
+                    break;
+                }
+            }
+
+            while ((line = reader.readLine()) != null) {
+                if(!line.isBlank()) {
+                    addError("Extra route found beyond declared route count", lineNumber);
+                }
+                lineNumber++;
+            }
+
+            // Validate Computation Line
+            if (computationLine == null) {
+                computationLine = skipBlankLines(reader);
+                lineNumber++;
+            }
+            validateComputationLine(computationLine, lineNumber);
         } catch (IOException e) {
-            
+            addError("Error reading the file" + e.getMessage(), -1);
         }
+
+        return errorCount == 0;
     }
 
     private int validateCityCount(String line, int lineNumber) {
@@ -78,6 +116,46 @@ public class CountryMap {
             }
         }
         return false;
+    }
+
+    private int validateRouteCount(String line, int lineNumber) {
+        try {
+            int routeCount = Integer.parseInt(line);
+            if(routeCount < 0) {
+                addError("Route count cannot be negative", lineNumber);
+            }
+            return routeCount;
+        } catch (NumberFormatException e) {
+            addError("Route count is not a valid integer", lineNumber);
+            return 0;
+        }
+    }
+
+    private void validateRouteFormat(String line, int lineNumber) {
+        String[] parts = line.split(" ");
+        if (parts.length != 3) {
+            addError("Invalid route format.", lineNumber);
+        } else {
+            String sourceCity = parts[0];
+            String destinationCity = parts[1];
+            String distanceString = parts[2];
+
+            if (!isCityValid(sourceCity)) {
+                addError("Source city does not exist: " + sourceCity, lineNumber);
+            }
+            if (!isCityValid(destinationCity)) {
+                addError("Destination city does not exist: " + destinationCity, lineNumber);
+            }
+
+            try {
+                int distance = Integer.parseInt(distanceString);
+                if (distance <= 0) {
+                    addError("Distance must be a positive integer.", lineNumber);
+                }
+            } catch (NumberFormatException e) {
+                addError("Distance is not a valid integer.", lineNumber);
+            }
+        }
     }
 
     private void addError(String errorDescription, int lineNumber) {
