@@ -9,9 +9,12 @@ public class CountryMap {
     private String[] cityNames;
     private City[] cities;
     private String computationLine;
+    private String[] errorMessages;
+    private int errorCount;
 
     public CountryMap(String inputMapFileName){
         this.inputMapFileName = inputMapFileName;
+        this.errorMessages = new String[100];
     }
 
     public String getComputationLine() {
@@ -20,6 +23,43 @@ public class CountryMap {
 
     public City[] getCities() {
         return cities;
+    }
+
+    public String[] getErrorMessage() {
+        return errorMessages;
+    }
+
+    public boolean validateFile() {
+        try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName))) {
+            int lineNumber = 0;
+
+            //Validate City Count
+            String line = skipBlankLines(reader);
+            lineNumber++;
+            int cityCount = validateCityCount(line.trim(), lineNumber);
+        } catch (IOException e) {
+            
+        }
+    }
+
+    private int validateCityCount(String line, int lineNumber) {
+        try {
+            int cityCount = Integer.parseInt(line);
+            if(cityCount <= 0) {
+                addError("Invalid city count.", lineNumber);
+            }
+            return cityCount;
+        } catch (NumberFormatException e) {
+            addError("City count is not a valid integer.", lineNumber);
+            return 0;
+        }
+    }
+
+    private void addError(String errorDescription, int lineNumber) {
+        if(errorCount < errorMessages.length) {
+            errorMessages[errorCount] = "Error Line: "+ lineNumber + " " + errorDescription;
+            errorCount++;
+        }
     }
 
     public void readInputFile()
