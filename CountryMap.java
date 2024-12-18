@@ -33,10 +33,15 @@ public class CountryMap {
         try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName))) {
             int lineNumber = 0;
 
-            //Validate City Count
+            // Validate City Count
             String line = skipBlankLines(reader);
             lineNumber++;
             int cityCount = validateCityCount(line.trim(), lineNumber);
+
+            // Validate City Names
+            line = skipBlankLines(reader);
+            lineNumber++;
+            cityNames = validateCityNames(line.trim(), cityCount, lineNumber);
         } catch (IOException e) {
             
         }
@@ -53,6 +58,26 @@ public class CountryMap {
             addError("City count is not a valid integer.", lineNumber);
             return 0;
         }
+    }
+
+    private String[] validateCityNames(String line, int exceptedCount, int lineNumber) {
+        String[] names = line.split(" ");
+        if(names.length != exceptedCount) {
+            addError("Number of cities does not match city count.", lineNumber);
+        }
+        return names;
+    }
+
+    private boolean isCityValid(String cityName) {
+        if(cityNames == null) {
+            return false;
+        }
+        for (int i = 0; i < cityNames.length; i++) {
+            if(cityNames[i].equals(cityName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addError(String errorDescription, int lineNumber) {
