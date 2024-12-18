@@ -131,6 +131,20 @@ public class CountryMap {
         }
     }
 
+    private void validateComputationLine(String line, int lineNumber) {
+        String[] parts = line.split(" ");
+        if (parts.length != 2) {
+            addError("Invalid computation line format.", lineNumber);
+        }
+
+        if (!isCityValid(parts[0])) {
+            addError("Start city does not exist: " + parts[0], lineNumber);
+        }
+        if (!isCityValid(parts[1])) {
+            addError("End city does not exist: " + parts[1], lineNumber);
+        }
+    }
+
     private void validateRouteFormat(String line, int lineNumber) {
         String[] parts = line.split(" ");
         if (parts.length != 3) {
