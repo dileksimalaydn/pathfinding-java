@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class CountryMap {
 
@@ -30,7 +32,7 @@ public class CountryMap {
     }
 
     public boolean validateFile() {
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName))) {
+        try(Scanner reader = new Scanner(new File(inputMapFileName))) {
             int lineNumber = 0;
 
             // Validate City Count
@@ -50,7 +52,8 @@ public class CountryMap {
 
             // Validate Routes
             int actualRouteCount = 0;
-            while ((line = reader.readLine()) != null) {
+            while (reader.hasNextLine()) {
+                line = reader.nextLine();
                 lineNumber++;
                 if (line.isBlank()) {
                     continue;
@@ -65,7 +68,8 @@ public class CountryMap {
                 }
             }
 
-            while ((line = reader.readLine()) != null) {
+            while (reader.hasNextLine()) {
+                line = reader.nextLine();
                 if(!line.isBlank()) {
                     addError("Extra route found beyond declared route count", lineNumber);
                 }
@@ -160,7 +164,7 @@ public class CountryMap {
             if (!isCityValid(destinationCity)) {
                 addError("Destination city does not exist: " + destinationCity, lineNumber);
             }
-
+            
             try {
                 int distance = Integer.parseInt(distanceString);
                 if (distance <= 0) {
@@ -191,8 +195,8 @@ public class CountryMap {
             printErrors();
             return;
         }
-        
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputMapFileName)))
+
+        try(Scanner reader = new Scanner(new File(inputMapFileName)))
         {
             // City Count
             String line = skipBlankLines(reader);
@@ -222,7 +226,6 @@ public class CountryMap {
             line = skipBlankLines(reader);
             computationLine = line.trim();
 
-
             System.out.println("File read is successful!");
         } catch(IOException e) {
             System.out.println("Error reading the file "+ e.getMessage());
@@ -237,7 +240,6 @@ public class CountryMap {
 
         City source = findCityByName(sourceCity);
         addRouteToCity(source, destinationCity, time);
-
     }
 
     private void addRouteToCity(City city, String destinationCity, String time)
@@ -263,9 +265,9 @@ public class CountryMap {
         throw new NoSuchElementException();
     }
 
-    private String skipBlankLines(BufferedReader reader) throws IOException {
-        String line;
-        while((line = reader.readLine()) != null) {
+    private String skipBlankLines(Scanner reader) throws IOException {
+        while(reader.hasNextLine()) {
+            String line = reader.nextLine();
             if(!line.isBlank()) {
                 return line;
             }
