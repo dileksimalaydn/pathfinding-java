@@ -4,8 +4,9 @@ public class Main{
         countryMap.validateFile();
         countryMap.printErrors();
         countryMap.readInputFile();
-        
-
+        WayFinder wayFinder = new WayFinder(countryMap);
+        System.out.println(wayFinder.findFastestPath());
+        wayFinder.writeResultToFile("output.txt");
     }
 
 }

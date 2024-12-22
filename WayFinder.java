@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class WayFinder {
     
     private CountryMap countryMap;
@@ -92,6 +96,31 @@ public class WayFinder {
         return "Fastest Way: " + path.toString().trim() + "\nTotal Time: " + time + " min";
     }
     
+    public void writeResultToFile(String filePath) {
+        try {
+            String result = findFastestPath();
+            if(result.startsWith("No path found")) {
+                writeToFile(filePath, "No path found!");
+            } else {
+                String[] resultLines = result.split("\n");
+                String fastestWay = resultLines[0].split(":")[1];
+                String totalTime = resultLines[1].split(": ")[1];
+
+                String formattedOutput = "Fastest Way: "+ fastestWay +"\n"+
+                "Total Time: " + totalTime;
+
+                writeToFile(filePath, formattedOutput);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: "+e.getMessage());
+        }
+    }
+
+    private void writeToFile(String filePath, String content) throws IOException {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))){
+            writer.write(content);
+        }
+    }
     
 
     
